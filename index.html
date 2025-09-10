@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz-Spiel</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #ffe5ec, #ffcad4);
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        #quizContainer {
+            background: #fff0f6;
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #d6336c;
+        }
+
+        .question {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .options button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: #ff85a2;
+            color: #fff;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .options button:hover {
+            background-color: #d6336c;
+        }
+
+        .options button.correct {
+            background-color: #28a745 !important;
+        }
+
+        .options button.wrong {
+            background-color: #dc3545 !important;
+        }
+
+        #result {
+            font-size: 1.2em;
+            margin-top: 20px;
+            color: #6c757d;
+        }
+
+        #restartBtn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background-color: #ff85a2;
+            color: #fff;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        #restartBtn:hover {
+            background-color: #d6336c;
+        }
+    </style>
+</head>
+<body>
+    <div id="quizContainer">
+        <h1>Quiz-Spiel</h1>
+        <div class="question" id="question"></div>
+        <div class="options" id="options"></div>
+        <div id="result"></div>
+        <button id="restartBtn" style="display:none;">Quiz Neustarten</button>
+    </div>
+
+    <script>
+        const quiz = [
+            {
+                question: "Was ist die Hauptstadt von Syrien?",
+                options: ["Damaskus", "Aleppo", "Homs", "Latakia"],
+                answer: "Damaskus"
+            },
+            {
+                question: "Welches traditionelle syrische Gericht ist beliebt bei Festessen?",
+                options: ["Kibbeh", "Falafel", "Pizza", "Burger"],
+                answer: "Kibbeh"
+            },
+            {
+                question: "Was ist die Hauptstadt von Deutschland?",
+                options: ["Berlin", "München", "Hamburg", "Frankfurt"],
+                answer: "Berlin"
+            },
+            {
+                question: "Wer gilt als einer der besten Fußballspieler aller Zeiten?",
+                options: ["Cristiano Ronaldo", "Neymar", "Messi", "Mbappé"],
+                answer: "Messi"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        const questionEl = document.getElementById('question');
+        const optionsEl = document.getElementById('options');
+        const resultEl = document.getElementById('result');
+        const restartBtn = document.getElementById('restartBtn');
+
+        function loadQuestion() {
+            const q = quiz[currentQuestion];
+            questionEl.textContent = q.question;
+            optionsEl.innerHTML = '';
+
+            q.options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.textContent = option;
+                btn.onclick = () => checkAnswer(option, btn);
+                optionsEl.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selected, btn) {
+            const correctAnswer = quiz[currentQuestion].answer;
+            if(selected === correctAnswer){
+                score++;
+                btn.classList.add('correct');
+            } else {
+                btn.classList.add('wrong');
+            }
+
+            // Disable all buttons
+            Array.from(optionsEl.children).forEach(b => b.disabled = true);
+
+            setTimeout(() => {
+                currentQuestion++;
+                if(currentQuestion < quiz.length){
+                    loadQuestion();
+                } else {
+                    showResult();
+                }
+            }, 1000);
+        }
+
+        function showResult() {
+            questionEl.textContent = '';
+            optionsEl.innerHTML = '';
+            resultEl.textContent = `Du hast ${score} von ${quiz.length} Fragen richtig beantwortet!`;
+            restartBtn.style.display = 'block';
+        }
+
+        restartBtn.onclick = () => {
+            currentQuestion = 0;
+            score = 0;
+            resultEl.textContent = '';
+            restartBtn.style.display = 'none';
+            loadQuestion();
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
