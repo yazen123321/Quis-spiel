@@ -7,7 +7,7 @@ Ziel: Interaktive App zur Demonstration von JavaScript-Logik.
 👉 [Hier klicken](https://yazen123321.github.io/Quis-spiel/)
 
 ## 💻 Code
-👉 [GitHub Repository](https://github.com/yazen123321/Quiz-Spiel)
+👉 [GitHub Repository](https://github.com/yazen123321/Quis-spiel.git)
 
 ## ⚙️ Technologien
 - HTML
